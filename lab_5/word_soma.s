@@ -21,5 +21,5 @@ main:
 
 	add a0, t3, zero
 
-	addi t0, zero, 1
+	addi t0, zero, 1 #imprime um inteiro
 	ecall

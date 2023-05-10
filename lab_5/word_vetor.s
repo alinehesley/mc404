@@ -34,15 +34,15 @@ main:
 	#estou imprimindo o que esta na variavel
 	#como faco para imprimir verdadeiramente o novo vetor
 
-	add a0, zero, t0
+	lw a0, s0, 0
 	addi t0, zero, 1
 	ecall
 
-	add a0, zero, t1
+	lw a0, s0, 4
 	addi t0, zero, 1
 	ecall
 
-	add a0, zero, t2
+	lw a0, s0, 8
 	addi t0, zero, 1
 	ecall
 	

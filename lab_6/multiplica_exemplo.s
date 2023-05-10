@@ -10,22 +10,22 @@ vetor:
 main:
 
     addi sp, sp, -4
-    sw ra, sp, 0
+    sw ra, sp, 0 #guardando o ra na pilha que estava antes da main
 
-    lui s0, %hi(vetor)
+    lui s0, %hi(vetor) #carregando endereco vetor em s0
     addi s0, s0, %lo(vetor)
 
 
-    # a0
+    # a0 - num_vetor
     addi a0, zero, 5
 
-    # a1
+    # a1 - endereco vetor
     add a1, zero, s0
        
-    # a2
+    # a2 - fator de multiplicacao
     addi a2, zero, 10
 
-    call MultiplicaVetor # jal ra, MultiplicaVetor
+    call MultiplicaVetor # jal ra, MultiplicaVetor aqui eu mudo o ra
 
     lw ra, sp, 0
     addi sp, sp, 4
@@ -43,7 +43,7 @@ Multiplica:
 
     for_mul:
         beq t0, zero, fim_multiplica
-        add t1, t1, a0
+        add t1, t1, a0 #multplico somando kkkk
         addi t0, t0, -1
         j for_mul
 
@@ -55,7 +55,7 @@ Multiplica:
 MultiplicaVetor:
     # Movimenta o apontador da pilha 4 posicoes para baixo (16 bytes) e guarda 4 registradores na pilha
     addi sp, sp, -16
-    sw   s0, sp, 12
+    sw   s0, sp, 12 #guardo pq vou usar essa bagaca poderia fazer folha ne meu fi
     sw   s1, sp, 8
     sw   s2, sp, 4
     sw   ra, sp, 0 #ra eh pra onde meu programa volta quando tem um ret
@@ -68,10 +68,10 @@ MultiplicaVetor:
     for:
         beq  s0, zero, fim #pq estou decrementando s0
 
-        lw   a0, s1, 0 #escrevendo em a0 o valor de s1
-        mv   a1, s2 #a1 recebe s2
+        lw   a0, s1, 0 #escrevendo em a0 o valor de s1 (primeira posicao vetor)
+        mv   a1, s2 #a1 recebe s2 fator
 
-        call Multiplica #a0 parametro x, a1 eh y
+        call Multiplica #a0 parametro x (vetor), a1 eh y(fator)
         sw   a0, s1, 0 #a0 (resposta) escreve no v
 
         addi t0, zero, 1

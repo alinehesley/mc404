@@ -13,7 +13,8 @@ main:
 
 	#transforma em minusculo com ANDI
 	#addi a0, a0, -32 pq assim n pode
-	ori a0, a0, 32
+	#ori a0, a0, 32 #funciona 
+	addi a0, a0, 32 #funciona
 
 	#imprime caractere em minusculo
 	addi t0, zero, 2

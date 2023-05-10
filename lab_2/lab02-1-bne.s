@@ -3,7 +3,7 @@ main:
   addi t0, zero, 4
   ecall
 
-  beq s0, zero, fim #se o valor lido for igual a zero vai p fim
+  beq a0, zero, fim #se o valor lido for igual a zero vai p fim
   
   # Soma 2 ao valor de a0
   addi a0, a0, 2
@@ -13,4 +13,6 @@ main:
   ecall
 
   j main #se for dif de zero
+  
+  fim:
   ret

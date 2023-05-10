@@ -1,7 +1,6 @@
 main:
-    addi sp, sp, -28
+    addi sp, sp, -4
     sw ra, sp, 0 #escrevendo o ra na pilha
-    sw a0, sp, 4
 
     addi  t0, zero, 6 #le uma string do teclado e guarda em a0
     ecall
@@ -20,7 +19,7 @@ strlen:
 
     strlen_loop:
         lbu t1, a0, 0 #t1 eh vetor *s
-        beq t1, zero, str_end
+        beq t1, zero, str_end #igual a espaco
         addi t0, t0, 1 #somando no cont
         addi a0, a0, 1 #andando no vetor
         j strlen_loop

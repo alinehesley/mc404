@@ -24,9 +24,8 @@ vetor_3:
 .text
 
 main:
-
 	lui s0, %hi(vetor_1)
-    addi s0, s0, %lo(vetor_1) #ta guardando so o tamanho 20 bits
+    addi s0, s0, %lo(vetor_1)
 
     lui s1, %hi(vetor_2)
     addi s1, s1, %lo(vetor_2)

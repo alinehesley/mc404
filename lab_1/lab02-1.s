@@ -17,9 +17,9 @@ main:
   # s0 menor a0
   blt s0, a0, imprime
   
-  #s0 maior a0
+  #s0 maior ou igual a0
   add a0, zero, s0
-  jal imprime
+  jal imprime #acho q n precisa disso ae
  
 imprime:
   addi t0, zero, 1

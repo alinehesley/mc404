@@ -1,46 +1,45 @@
 .data
 vetor:
-	.word 0
-	.word 0
+	.word 0 
+	.word 0 
 	.word 0
 	.word 0
 	.word 0
 	.word 0
 .text
+
 main:
+	#matriz 2 x 3
 	#preencher a posicao i,j com o valor (i+j)
-	lui s0, %hi(vetor)
-	add s0, s0, %lo(vetor)
-  
-	add t1, t1, zero #valor i (linha), mas n garanto q tem 0 em t0
-	add t2, t2, zero #valor j (coluna)
-
-	#qnt linha 
-	addi s1, zero, 1
-	addi s2, zero, 2
-
-	bltu t1, s1, continua_linha
-
-	continua_linha: 
-		bltu t2, s2, continua_coluna
-		continua_coluna:
-			#primeiro somo t1+t2 (linha + coluna)
-			add t3, t1, t2
-
-			#descobre posicao do vetor (linha*coluna) + coluna
-			add t4, 
-
-			#escrevo esse valor na posicao do vetor
-			sw t3, s0, #como escrevo imm de t4
+	lui s0, %hi(vetor) #carregando o vetor
+	addi s0, s0, %lo(vetor)
 
 
-			#escrevo esse valor na posicao vetor[t1][t2]
+	addi t0, zero, 2 #linha
+	addi t1, zero, 3 #coluna
+	addi t3, zero, 0 #cont_linha
+	addi t4, zero, 0 #cont_coluna
+	addi t5, zero, 0 #possui a soma
 
-			#incrementa coluna 
-			addi t2, t2, 1
-		#incrementa linha
-		addi t1, t1, 1
+	#comeco na linha 0 
+		coluna:
+			add t5, t4, t3 #soma linha e coluna
+			sw t5, s0, 0 #escrevo no vetor a soma
 
-ret
+			addi t4, t4, 1 #ando na coluna
+			addi s0, s0, 4 #ando no vetor
+			beq t4, t1, prox_linha #se for a ultima coluna da linha vai p prox linha
+			j coluna
+		
+		prox_linha:
+			addi t3, t3, 1
+			addi t4, zero, 0
+			beq t3, t0, fim #se for ultima linha vai p fim t3 == t0
+			j coluna
+
+	#vou percorrendo a coluna 
+	#troco a linha qnd chegar no fim da coluna
+	fim:
+		ret
 
 	
