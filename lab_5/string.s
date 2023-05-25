@@ -37,7 +37,7 @@ main:
     addi t1, zero, 0 #cont letras
 
     conta_string: 
-        lbu t2, a0, 0 #passa a letra p t1
+        lbu t2, a0, 0 #passa a letra p t2
         addi a0, a0, 1 #vai p prox letra
 
         #se t2 for igual a espaco ou igual a 0 vai p o fim
