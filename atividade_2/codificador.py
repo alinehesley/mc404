@@ -15,8 +15,32 @@ for i in range(3, 7):
 
 def str_bin(s,l,r):
     # 0b00000101
-    binario = bin(int(s))[2:].zfill(32)[(31-r) : (31-l+1)]
+    binario = bin(int(s))[2:]
+
+    if int(s) < 0:
+        #binario = bin(~(-int(s)))[2:]
+        binario = bin((int(s) + (1 << 32)) % (1 << 32))[2:]
+
+    binario = binario.zfill(32)[(31-r) : (31-l+1)]
+    
     return binario
+
+# def str_bin(s,l,r):
+#     # 0b00000101
+#     binario = bin(int(s))[2:]
+
+#     if int(s) < 0:
+#         binario = bin(~(-int(s)))[2:]
+
+#     #binario = bin(int(s))[2:].zfill(32)[(31-r) : (31-l+1)]
+#     binario = binario.zfill(32)[(31-r) : (31-l+1)]
+    
+#     return binario
+
+# def str_bin_signed(s,l,r):
+#     # 0b00000101
+#     binario = bin(int(s))[2:].zfill(32)[(31-r) : (31-l+1)]
+#     return binario
 
 def bits_hex(bits):
     n = int(bits, 2)
@@ -65,6 +89,7 @@ def codifica_xor(valores):
 def codifica_call(valores):
     # (JAL ra, destino) - imm[20|10:1|11|19:12] rd 1101111
     # JAL rd, rot
+    #call 0x7873
     p1 = op[valores[0]]
     p2 = registrador['ra'] #aqui é o ra
     rot = int(valores[1]) - 1000
@@ -90,7 +115,7 @@ def codifica_beq(valores):
     print("opa, preciso saltar", rot, " posicoes")
     print("num em bin:", str_bin(str(rot), 0, 12))
 
-    p2 = str_bin(rot, 1, 4) + str_bin(rot,11,11)
+    p2 = str_bin(str(rot), 1, 4) + str_bin(str(rot),11,11)
     print ("a p2: ", p2)
 
     p3 = '000'
@@ -98,7 +123,7 @@ def codifica_beq(valores):
     p4 = registrador[valores[1]]
     p5 = registrador[valores[2]]
 
-    p6 = str_bin(rot, 12, 12) + str_bin(rot, 5, 10)
+    p6 = str_bin(str(rot), 12, 12) + str_bin(str(rot), 5, 10)
     print("a p6: ", p6)
 
     print(bits_hex(p6 + p5 + p4 + p3 + p2 + p1))
