@@ -33,12 +33,7 @@ def strdec_bin(s,l,r):
 def bits_hex(bits):
     n = int(bits, 2)
     hexadecimal = hex(n)[2:].zfill(8)
-    return '0x' + hexadecimal
-
-def hex_bits(hex, l, r):
-    decimal_value = int(hex, 16)  # Converte hexadecimal para decimal
-    binary_value = bin(decimal_value)[2:]  # Converte decimal para binário (remove o prefixo '0b')
-    return binary_value.zfill(32)[(31-r) : (31-l+1)]
+    return '0x' + hexadecimal.upper()
 
 
 def separa(str):
@@ -57,7 +52,7 @@ def codifica_addi(valores):
     p2 = registrador[valores[1]]
     p3 = '000'
     p4 = registrador[valores[2]]
-    p5 = strdec_bin(valores[3],0 , 11)
+    p5 = strdec_bin(valores[3] ,0 , 11)
     print(bits_hex(p5 + p4 + p3 + p2 + p1))
 
 def codifica_slli(valores):
@@ -90,7 +85,7 @@ def codifica_call(valores):
     p3 = strdec_bin(rot, 20, 20) + strdec_bin(rot, 1, 10) + strdec_bin(rot, 11, 11) + strdec_bin(rot, 12, 19)
     print(bits_hex(p3 + p2 + p1))
 
-def codifica_ret(valores):
+def codifica_ret(valores): #o valor é cte
     #(JALR zero, ra, 0) -  imm[11:0] rs1 000 rd 1100111
     #(JALR rd, rs1, imm)
     p1 = op[valores[0]]
@@ -143,24 +138,40 @@ def codifica_mul(valores):
     print(bits_hex(p6 + p5 + p4 + p3 + p2 + p1))
 
 def codifica_lui(valores):
-    #imm[31:12] rd 0110111
-    #exemplo slide: lui a0, 0x87654
-    #resp esperada: 0x87654537 
-    #resp dada: 0x00087537 (fiz no papel e tbm dá isso)
-    
-    p1 = op[valores[0]] #0110111
-    print("o opcode é ", p1)
-
-    p2 = registrador[valores[1]] #x10 - 01010
-    print('o valor do registrador é ', p2)
-    print("O valor do imm é ", valores[2])
-    print("esse numero em bin é ", strdec_bin(valores[2], 0, 31))
+    #imm[31:12] rd 0110111, na realidade imm[20:0]
+    p1 = op[valores[0]]
+    p2 = registrador[valores[1]] 
     p3 = strdec_bin(valores[2], 0, 20)
     print(bits_hex(p3 + p2 + p1))
 
 
 def codifica_li(valores):
-    return print('ainda n')
+    #li x2, 0xFFFFFFFF
+    N = int(valores[2])
+  
+    if(N >= -2048 and N <= 2047): #só joga o valor no addi
+        valores_addi = ['addi', valores[1], 'zero', valores[2]]
+        codifica_addi(valores_addi)
+
+    else:
+        #estender sinal baixo 12 bits
+        M = N & 0b00000000000000000000111111111111
+
+        bit_12 = (N >> 11) & 1
+        K = N & 0b11111111111111111111000000000000
+        if(bit_12 == 1):
+            K += 4096 #incrementa 
+        K = K >> 12 #pq minha funcao pega do [20:0]
+
+        # Load upper 20 bits
+        valores_lui = ['lui', valores[1], K]
+        codifica_lui(valores_lui)
+        #LUI x2,K
+
+        # Add lower bits
+        valores_addi = ['addi', valores[1], valores[1], M]
+        codifica_addi(valores_addi)
+        #ADDI x2,x2,M
 
 try:
     while True:
