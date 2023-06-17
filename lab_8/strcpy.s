@@ -3,7 +3,7 @@
 
 #declarar duas strings
 .data
-    str1: .string "bolo"
+    str1: .string "bolooooo"
     str2: .string "cake"
 
 .text
@@ -23,7 +23,7 @@ strcpy:
     addi s1, s1, 1 #ando em s1 e s2
     addi s2, s2, 1
 
-    lbu t2, 0(s1)
+    lbu t2, 0(s2)
 
     bne t2, zero, strcpy
 

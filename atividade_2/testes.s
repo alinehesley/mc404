@@ -48,3 +48,4 @@ xor a2, s10, s11
 mul t0, t5, t5
 mul ra, sp, t4
 ret
+li a0, 3735928559

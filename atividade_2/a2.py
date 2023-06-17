@@ -1,4 +1,5 @@
-import sys
+#Aline Hesley Silva Sousa
+#RA: 248490
 
 #dict do opcode
 op = {'addi': '0010011', 'slli':'0010011', 'xor':'0110011', 'call':'1101111', 'ret':'1100111', 'beq':'1100011', 'lw':'0000011', 'sw':'0100011', 'mul':'0110011', 'lui':'0110111'}
@@ -34,7 +35,6 @@ def bits_hex(bits):
     n = int(bits, 2)
     hexadecimal = hex(n)[2:].zfill(8)
     return '0x' + hexadecimal.upper()
-
 
 def separa(str):
     valor = str.replace('(', ' ').replace(')', ' ').split(' ')
@@ -78,7 +78,6 @@ def codifica_xor(valores):
 def codifica_call(valores):
     # (JAL ra, destino) - imm[20|10:1|11|19:12] rd 1101111
     # JAL rd, rot
-    # call 0x7873
     p1 = op[valores[0]]
     p2 = registrador['ra'] #aqui é o ra
     rot = int(valores[1]) - 1000
@@ -87,7 +86,6 @@ def codifica_call(valores):
 
 def codifica_ret(valores): #o valor é cte
     #(JALR zero, ra, 0) -  imm[11:0] rs1 000 rd 1100111
-    #(JALR rd, rs1, imm)
     p1 = op[valores[0]]
     p2 = '00000'#zero
     p3 = '000'
@@ -144,7 +142,6 @@ def codifica_lui(valores):
     p3 = strdec_bin(valores[2], 0, 20)
     print(bits_hex(p3 + p2 + p1))
 
-
 def codifica_li(valores):
     #li x2, 0xFFFFFFFF
     N = int(valores[2])
@@ -163,50 +160,45 @@ def codifica_li(valores):
             K += 4096 #incrementa 
         K = K >> 12 #pq minha funcao pega do [20:0]
 
-        # Load upper 20 bits
+        # carrega 20 bits superiores
         valores_lui = ['lui', valores[1], K]
         codifica_lui(valores_lui)
         #LUI x2,K
 
-        # Add lower bits
+        # add 12 bits
         valores_addi = ['addi', valores[1], valores[1], M]
         codifica_addi(valores_addi)
         #ADDI x2,x2,M
 
-try:
-    while True:
-            instrucao = input()
-            valores = instrucao.replace(",","").split(" ")
+instrucao = input()
+valores = instrucao.replace(",","").split(" ")
 
-            #Recebo valores
-            #verifico qual o opcode, dependendo do opcode vai p uma funcao q codifica ele
+#Recebo valores everifico qual o opcode, 
+#dependendo do opcode vai para uma funcao que codifica ele
 
-            opcode = valores[0]
+opcode = valores[0]
 
-            if opcode == 'addi':
-                codifica_addi(valores)
-            elif opcode == 'slli':
-                codifica_slli(valores)
-            elif opcode == 'xor':
-                codifica_xor(valores)
-            elif opcode == 'call':
-                codifica_call(valores)
-            elif opcode == 'ret':
-                codifica_ret(valores)
-            elif opcode == 'beq':
-                codifica_beq(valores)
-            elif opcode == 'lw':
-                codifica_lw(valores)
-            elif opcode == 'sw':
-                codifica_sw(valores)
-            elif opcode == 'mul':
-                codifica_mul(valores)
-            elif opcode == 'lui':
-                codifica_lui(valores)
-            elif opcode == 'li':
-                codifica_li(valores)
-            else:
-                print("Instrução não reconhecida/disponível")
-except EOFError:
-    sys.exit(0)
-
+if opcode == 'addi':
+    codifica_addi(valores)
+elif opcode == 'slli':
+    codifica_slli(valores)
+elif opcode == 'xor':
+    codifica_xor(valores)
+elif opcode == 'call':
+    codifica_call(valores)
+elif opcode == 'ret':
+    codifica_ret(valores)
+elif opcode == 'beq':
+    codifica_beq(valores)
+elif opcode == 'lw':
+    codifica_lw(valores)
+elif opcode == 'sw':
+    codifica_sw(valores)
+elif opcode == 'mul':
+    codifica_mul(valores)
+elif opcode == 'lui':
+    codifica_lui(valores)
+elif opcode == 'li':
+    codifica_li(valores)
+else:
+    print("Instrução não reconhecida/disponível")
